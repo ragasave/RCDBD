@@ -1,7 +1,11 @@
 <template>
-    <div>
+    <div class="playground-pg">
         <headerLayout></headerLayout>
-        <leftAside></leftAside>
+        <div class="playground-pg-container">
+            <leftAside :db="db"></leftAside>
+            <Playground :db="db"></Playground>
+            <rightAside :db="db" :dataTypes="dataTypes"></rightAside>
+        </div>
     </div>
 </template>
 <script>

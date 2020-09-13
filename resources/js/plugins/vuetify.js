@@ -4,6 +4,10 @@ import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
 
-const opts = {}
+const opts = {
+    global: {
+        // ripples: false
+    },    
+}
 
 export default new Vuetify(opts)
