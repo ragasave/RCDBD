@@ -11357,6 +11357,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -28741,9 +28752,28 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("v-toolbar-title", [_vm._v("RCDBD")]),
+      _c("v-toolbar-title", [
+        _c("a", { attrs: { href: "https://github.com/ragasave" } }, [
+          _c("div", [_vm._v("\n          RCDBD\n          ")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticStyle: { "font-size": "16px", "margin-top": "-9px" } },
+            [_vm._v("\n              Ragasave\n          ")]
+          )
+        ])
+      ]),
       _vm._v(" "),
-      _c("v-spacer")
+      _c("v-spacer"),
+      _vm._v(" "),
+      _c("v-btn", { attrs: { icon: "" } }, [
+        _c(
+          "a",
+          { attrs: { href: "https://github.com/ragasave" } },
+          [_c("v-icon", [_vm._v("mdi-github")])],
+          1
+        )
+      ])
     ],
     1
   )
