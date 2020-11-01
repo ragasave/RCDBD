@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{config('app.name')}}</title>
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital@0;1&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Sanchez&display=swap" rel="stylesheet">
+    <link href="css/materialdesignicons.min.css" rel="stylesheet"><link rel="stylesheet" href="css/main.css"></link rel="stylesheet">
+
+</head>
+<body>
+    <div id="mute"></div>
+    <div id="app"></div>
+    <script src="js/app.js"></script>
+
+    <script>
+        function adjustLine(fromTable, formColumn, toTable, toColumn, connector){
+            if(!fromTable|| !formColumn|| !toTable|| !toColumn){return}
+            if(!connector){
+                var connector = document.createElement("div");
+                document.querySelector('.playground-board-tables').appendChild(connector);
+            }
+            // console.log(toColumn);
+            var fromTableWidth = fromTable.offsetWidth;
+            var toTableWidth = toTable.offsetWidth;
+            var fromTableLeft = fromTable.parentElement.offsetLeft;
+            var toTableLeft = toTable.parentElement.offsetLeft;
+            var fT = Number(fromTable.dataset.top || 0) + formColumn.offsetTop + 33 + formColumn.offsetHeight/2;
+            var tT = Number(Number(toTable.dataset.top || 0)) + toColumn.offsetTop + 33 + toColumn.offsetHeight/2;
+            var fL = Number(fromTable.dataset.left || 0)  + formColumn.offsetLeft - 50;
+            var tL = Number(Number(toTable.dataset.left || 0) + toColumn.offsetLeft - 50);
+
+            // console.log(fL , tL, connector, fromTable, toTable);
+            // console.log(fromTable, connector , [fL , fromTableWidth/2], [tL , toTableWidth/2]);
+            // console.log(connector);
+
+            if(fL + fromTableWidth/2 > tL + toTableWidth/2){
+                // console.log('right', fL + fromTableWidth > tL + (toTableWidth * 2));
+
+                if(fL + fromTableWidth > tL + (toTableWidth * 2)){
+                    fL = fL;
+                    tL = tL + toTableWidth;
+                    connector.style.borderLeft  = '1px solid';
+                    connector.style.borderRight = 'none';
+
+                }else{
+                    // console.log('hereT');
+                    fL = fL + fromTableWidth;
+                    tL = tL + toTableWidth;
+                    connector.style.borderRight = '1px solid';
+                    connector.style.borderLeft = 'none';
+
+                }
+            }else{
+                // console.log('here');
+                // console.log('left');
+                if(fL + fromTableWidth < tL){
+                    fL = fL + fromTableWidth;
+                    // connector.style.borderRight = '1px solid';
+                    // connector.style.borderLeft = 'none';
+                }else{
+                    fL = fL + fromTable.offsetWidth;
+                    tL = tL + toTable.offsetWidth;
+                    connector.style.borderRight = '1px solid';
+                    connector.style.borderLeft = 'none';
+                }
+            }
+
+            // return;
+
+
+
+            var CA   = Math.abs(tT - fT);
+            var CO   = Math.abs(tL - fL);
+            var H    = Math.sqrt(CA*CA + CO*CO);
+            var ANG  = 180 / Math.PI * Math.acos( CA/H );
+
+            if(tT > fT){
+            var top  = (tT-fT)/2 + fT;
+            }else{
+            var top  = (fT-tT)/2 + tT;
+            }
+            if(tL > fL){
+            var left = (tL-fL)/2 + fL;
+            }else{
+            var left = (fL-tL)/2 + tL;
+            }
+
+            if(( fT < tT && fL < tL) || ( tT < fT && tL < fL) || (fT > tT && fL > tL) || (tT > fT && tL > fL)){
+            ANG *= -1;
+            }
+            top-= H/2;
+
+            connector.style["-webkit-transform"] = 'rotate('+ ANG +'deg)';
+            connector.style["-moz-transform"] = 'rotate('+ ANG +'deg)';
+            connector.style["-ms-transform"] = 'rotate('+ ANG +'deg)';
+            connector.style["-o-transform"] = 'rotate('+ ANG +'deg)';
+            connector.style["-transform"] = 'rotate('+ ANG +'deg)';
+            connector.style.top    = top+'px';
+            connector.style.left   = left+'px';
+            connector.style.height = H + 'px';
+
+            // to pointer
+            // connector.querySelector('.to-table-connector-pointer').style.top    = top+'px';
+            // connector.querySelector('.to-table-connector-pointer').style.left   = left+'px';
+        }
+
+    </script>
+    <style>
+        .table-connector{
+        /* position:absolute;
+        width:2px;
+        margin-top:-1px;
+        background-color:red; */
+            position: absolute;
+            margin-top: -1px;
+            background-color: transparent;
+            border-radius: 50%;
+            width: 100px;
+            border-left: 1px solid;
+        }
+
+        .table-connector .table-connector-pointer {
+            width: 10px;
+            height: 10px;
+            /* background: inherit; */
+            border: 3px solid;
+            border-color: inherit;
+            display: block;
+            border-radius: 50%;
+            position: absolute;
+            /* z-index: 9; */
+            /* top: calc(50% - 5px); */
+            /* left: 1px; */
+        }
+
+        .table-connector-pointer.from-table-connector-pointer {
+            top: 100%;
+            left: calc(50% - 5px);
+        }
+
+        .table-connector-pointer.to-table-connector-pointer {
+            top: 0%;
+            left: calc(50% - 5px);
+            border-color: red;
+        }
+
+        .playground-board-tables .table-connector-svg{
+            width: 100%;
+            height: 100%;
+            position: absolute
+        }
+    </style>
+</body>
+</html>

@@ -8,7 +8,7 @@ header {
 }
 
 .playground-pg {
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Sanchez';
   background-color: #f7f7f7;
 }
 
@@ -32,7 +32,6 @@ header {
   border-right: 2px solid rgba(0, 0, 0, 0.04);
   width: 250px;
   min-width: 250px;
-  display: none;
 }
 
 .playground-pg .rc-aside.rc-left-aside .rc-aside-databases-list-container .rcdbd-lmi-dbname {
@@ -57,7 +56,7 @@ header {
   cursor: pointer;
 }
 
-.playground-pg .rc-aside.rc-left-aside .rc-aside-databases-list-container .rc-aside-databases-table-list li:hover {
+.playground-pg .rc-aside.rc-left-aside .rc-aside-databases-list-container .rc-aside-databases-table-list li:hover, .playground-pg .rc-aside.rc-left-aside .rc-aside-databases-list-container .rc-aside-databases-table-list li.active {
   background-color: #546e7a1c;
 }
 
@@ -131,7 +130,12 @@ header {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  min-width: 250px;
   border-radius: 3px;
+}
+
+.playground-pg .playground-board .rcdbd-table[rcdbtableselected="true"] .rcdbd-table-column.active {
+  background-color: #eee;
 }
 
 .playground-pg .playground-board .rcdbd-table hr {
@@ -161,12 +165,18 @@ header {
 
 .playground-pg .playground-board .rcdbd-table .rcdbd-table-wrapper .rcdbd-table-columns-wrapper {
   width: 100%;
+  border-collapse: collapse;
 }
 
 .playground-pg .playground-board .rcdbd-table .rcdbd-table-wrapper .rcdbd-table-columns {
   width: 100%;
+  cursor: pointer;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.playground-pg .playground-board .rcdbd-table .rcdbd-table-wrapper .rcdbd-table-columns tr:hover {
+  background-color: #eeeeee82;
 }
 
 .playground-pg .playground-board .rcdbd-table .rcdbd-table-wrapper .rcdbd-table-columns .rcdbd-table-column > td {
@@ -262,6 +272,11 @@ header {
 .playground-pg .draggable.vdr {
   display: inline-block;
   position: absolute;
+  z-index: 999 !important;
+}
+
+.playground-pg .draggable.vdr.active {
+  /* z-index: 9 !important; */
 }
 
 .playground-pg .playground-components {
@@ -363,5 +378,15 @@ header {
 
 .rcdbd-lp-icb {
   margin-top: -20px;
+}
+
+/**
+* vue-simple-context-menu
+**/
+.vue-simple-context-menu {
+  padding: 0px !important;
+  background-color: #fff !important;
+  min-width: 192px;
+  position: fixed !important;
 }
 /*# sourceMappingURL=main.css.map */

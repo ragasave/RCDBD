@@ -8,7 +8,8 @@ header{
 }
 .playground-pg{
     // font-family: monospace;
-    font-family: 'Ubuntu', sans-serif;
+    // font-family: 'Ubuntu', sans-serif;
+    font-family: 'Sanchez';
     background-color: #f7f7f7;
     & .playground-pg-container{
         display: table;
@@ -37,7 +38,7 @@ header{
             border-right: 2px solid rgba(0, 0, 0, 0.04);
             width: 250px;
             min-width: 250px;
-            display: none;
+            // display: none;
 
             & .rc-aside-databases-list-container {
 
@@ -58,7 +59,7 @@ header{
                     & li{
                         padding: 5px 10px 5px 40px;
                         cursor: pointer;
-                        &:hover{
+                        &:hover, &.active{
                             background-color: #546e7a1c;
                         }
                     }
@@ -125,11 +126,14 @@ header{
             display: table;
             user-select: none;
             // cursor: pointer;
-            // min-width: 250px;
+            min-width: 250px;
             // border: 1px solid rgba(0, 0, 0 , 0.05);
             border-radius: 3px;
             // overflow: hidden;
             // box-shadow: 0px 0px 2px 2px #000;
+            &[rcdbtableselected="true"] .rcdbd-table-column.active {
+                background-color: #eee;
+              }
             & hr {
                 box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.28);
                 border-top: 2px solid rgba(0, 0, 0, 0.46);
@@ -156,9 +160,14 @@ header{
                 }
                 & .rcdbd-table-columns-wrapper{
                     width: 100%;
+                    border-collapse: collapse;
                 }
                 & .rcdbd-table-columns{
                     width : 100%;
+                    cursor: pointer;
+                    & tr:hover{
+                        background-color: #eeeeee82;
+                    }
                     // box-shadow: 0px -2px 2px 0px #000;
                     background: #fff;
                     border: 1px solid rgba(0, 0, 0 , 0.05);
@@ -252,7 +261,7 @@ header{
             bottom: 10px;
             box-shadow: 0px 0px 7px -1px #00000036;
             border-radius: 3px;
-            
+
         }
 
         & .playground-board-summary{
@@ -265,8 +274,10 @@ header{
     .draggable.vdr {
         display: inline-block;
         position: absolute;
+        &.active {
+            z-index: 9 !important;
+        }
     }
-
 
 
     & .playground-components{
@@ -300,7 +311,7 @@ header{
            & .rcdbd-empty-panel-icon{
                 font-size: 85px;
                 color: rgba(0, 0, 0, 0.12);
-           } 
+           }
         }
     }
 }
@@ -369,4 +380,18 @@ header{
 }
 .rcdbd-lp-icb {
     margin-top: -20px;
+}
+
+
+/**
+* vue-simple-context-menu
+**/
+
+.vue-simple-context-menu{
+    padding: 0px !important;
+    // margin-top: -70px !important;
+    // margin-left: -15px !important;
+    background-color: #fff !important;
+    min-width: 192px;
+    position: fixed !important;
 }

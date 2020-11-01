@@ -1,19 +1,19 @@
 <template>
-    <div class="playground-board">
+    <div class="playground-board" @contextmenu="playgroundHandleRightClick">
         <div class="playground-board-wrapper">
             <div @mousewheel="mouseWheel($event)" @contextmenu="boardContextMenu($event)" class="playground-board-tables" ref="rcdbdBoardTables">
                 <!-- Table -->
-                <vue-draggable-resizable :active="true" v-for="(table, index) in db.tables" v-bind:key="index" w="auto" h="auto" :resizable="false" :parent="false">
-                <div :rcdbTableSelected="db.selectedTableIndex == index" class="rcdbd-table" @click="db.selectedTableIndex = index">
+                <vue-draggable-resizable   @dragstop="$db.updateTablePosition" :x="$db.getTableByIndex(index).left" :y="$db.getTableByIndex(index).top" :active="true" v-for="(table, index) in $db.getTables()" v-bind:key="index" w="auto" h="auto" :resizable="false" :parent="false">
+                <div :rcdbTableSelected="$db.isThisTableIsSelected(index)" @contextmenu="tableHandleRightClick($event, table)" :rcdbTableIndex="index" class="rcdbd-table" @click="$db.selectTable(index)" :data-top="table.top" :data-left="table.left">
                     <div class="rcdbd-table-wrapper">
                         <div class="rcdbd-tablename">
                             <span v-text="table.name"></span>
-                            <v-icon class="icon-show-table-options">mdi-dots-vertical</v-icon>
+                            <v-icon class="icon-show-table-options" >mdi-dots-vertical</v-icon>
                         </div>
                         <hr class="">
                         <div class="rcdbd-table-columns">
                             <table class="rcdbd-table-columns-wrapper">
-                                <tr v-for="(column, index) in table.columns" v-bind:key="index" class="rcdbd-table-column">
+                                <tr v-for="(column, cIndex) in $db.getTableByIndex(index).columns" :rcdbColumnIndex="cIndex" :rcdbColumnSelected="table.selectedColumnIndex == cIndex" @click="table.selectedColumnIndex = cIndex" v-bind:key="cIndex" :class="['rcdbd-table-column', table.selectedColumnIndex == cIndex ? 'active' : '']">
                                     <td class="rcdbd-table-column-pk">
                                         <v-icon v-if="column.pk">mdi-key</v-icon>
                                     </td>
@@ -27,6 +27,9 @@
                                     <td class="rcdbd-table-column-null">
                                         <span v-if="column.null">null</span>
                                     </td>
+                                    <!-- <td class="rcdbd-table-column-ai">
+                                        <span v-if="column.ai">ai</span>
+                                    </td> -->
                                 </tr>
                             </table>
                         </div>
@@ -67,6 +70,19 @@
 
                 </div>
             </div>
+            <vue-simple-context-menu
+            :elementId="$util.uniqueId()"
+            :options="playgroundMenuOptions"
+            ref="playgroundContextMenu"
+            @option-clicked="playgroundOptionClicked"
+            />
+
+            <vue-simple-context-menu
+            :elementId="$util.uniqueId()"
+            :options="tableMenuOptions"
+            ref="tableContextMenu"
+            @option-clicked="tableOptionClicked"
+            />
         </div>
     </div>
 </template>
@@ -85,6 +101,13 @@ export default {
             translateX : 1,
             translateY : 1,
             scaling : false,
+            playgroundMenuOptions : [
+                {name : "Create table", method : this.$db.createTable}
+            ],
+            tableMenuOptions : [
+                {name : "Add column", method : this.$db.addColumn},
+                {name : "Delete table", method : this.$db.deleteTable},
+            ]
         }
     },
     created() {
@@ -117,7 +140,7 @@ export default {
         },
         scroll(x,y){
             Velocity(this.$refs.rcdbdBoardTables, {translateX : x, translateY:y}, {
-                duration : 0  
+                duration : 0
             })
         },
         zoom(scale){
@@ -126,13 +149,37 @@ export default {
             this.scale = scale;
             this.scaling = true;
             Velocity(this.$refs.rcdbdBoardTables, {scale : scale}, {
-                duration : 150  
+                duration : 150
             })
             .then(function(elements) { this.scaling = false; }.bind(this))
             .catch(function(error) { this.scaling = false; }.bind(this))
         },
         boardContextMenu(e){
             e.preventDefault();
+        },
+        playgroundOptionClicked(item){
+            if(item.option.method){
+                item.option.method();
+            }
+        },
+        playgroundHandleRightClick(e){
+            if(e.target != this.$refs.rcdbdBoardTables){
+            // this.$refs.playgroundContextMenu.hideMenu();
+                return;
+            }
+            this.$refs.playgroundContextMenu.showMenu(event)
+        },
+        tableHandleRightClick(e, item){
+            // if(e.target != this.$refs.rcdbdBoardTables){
+            // this.$refs.playgroundContextMenu.hideMenu();
+                // return;
+            // }
+            this.$refs.tableContextMenu.showMenu(event, item)
+        },
+        tableOptionClicked(data){
+            if(data.option.method){
+                data.option.method(data.item);
+            }
         }
     },
     components:{

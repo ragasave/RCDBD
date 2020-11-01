@@ -1,13 +1,13 @@
-<template>  
+<template>
     <v-toolbar dense>
-      <div @click="toggleMenu">
-        <v-app-bar-nav-icon @click="showLeftMenu != showLeftMenu"></v-app-bar-nav-icon>
+      <div @mousedown="pg.leftAside.toggle()">
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
       </div>
 
       <v-toolbar-title>RCDBD</v-toolbar-title>
-
+      <!-- <span>{{$getConfig('leftMenuEnabled')+""}}</span> -->
       <v-spacer></v-spacer>
-<!-- 
+<!--
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
@@ -29,18 +29,10 @@ const $ = require('jquery');
 export default {
   data(){
     return {
-      showLeftMenu:false
     }
   },
   methods : {
-    toggleMenu(){
-      this.showLeftMenu = !this.showLeftMenu;
-      if(this.showLeftMenu){
-        $('.rc-left-aside').show();
-      }else{
-        $('.rc-left-aside').hide();
-      }
-    }
+
   }
 }
 </script>

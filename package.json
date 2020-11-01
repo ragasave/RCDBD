@@ -10,11 +10,13 @@
     "watch-poll": "npm run watch -- --watch-poll"
   },
   "dependencies": {
+    "@svgdotjs/svg.js": "^3.0.16",
     "jquery": "^3.5.1",
     "velocity-animate": "^1.5.2",
     "vue": "^2.6.12",
     "vue-draggable-resizable": "^2.2.0",
     "vue-router": "^3.4.3",
+    "vue-simple-context-menu": "^3.3.2",
     "vuetify": "^2.2.11"
   },
   "devDependencies": {
